@@ -1,0 +1,30 @@
+5) Explique como uma análise de discriminante pode construir fronteiras de decisão lineares.
+
+R: Ao fazer uma análise discriminante de um grupo de dados, analisamos as variáveis independentes dos dados apresentados junto com a classe resultante dos mesmos, e assim dividimos a área em que os dados estão presentes em regiões, onde cada região tem como propósito identificar
+a classe a qual cada dado pertence, facilitando a previsão da classe de futuros dados que possam ser inseridos. Sendo assim, os pontos de encontro de cada região de classe, isto é, os espaços no plano onde terminam uma região e inicia-se outra,
+tais limites das regiões são chamadas de "fronteiras de decisão". Logo, caso a técnica utilizada para construir tais regiões seja uma análise discriminante linear, as fronteiras entre as regiões também terão como forma uma estrutura linear, resultando assim em fronteiras de decisão lineares.
+
+6) Porque as funções discriminantes são classificadores paramétricos?
+
+R: As funções discriminantes são classificadores paramétricos pois dependem de receber uma parametrização, ou seja, dependem de calcular valores vindo dos casos já conhecidos. Em suma, é necessário uma análise estatística dos valores já inseridos,
+onde podemos calcular propriedades como a média e o desvio padrão, e assim fornecemos tais propriedades como parâmetros, para só aí podermos desenhar as funções discriminantes no plano dos dados e definirmos
+as regiões dos dados fornecidos no plano cartesiano, e posteriormente fazer uma previsão mais acurada de dados futuros que venham a ser inseridos.
+
+7) Dado as fronteiras de decisão abaixo, qual possui menor sensibilidade à outilier ou presença de ruído. Justifique sua escolha.
+
+8) Porque o KNN é um classificador não-paramétrico?
+
+As funções discriminantes são classificadores paramétricos pois necessitam que calculemos propriedades como a média e o desvio padrão, para fornecemos os mesmos como parâmetros e executarmos tais funções.
+Por outro lado, o classificador KNN não necessita que tais propriedades sejam calculados, se apoiando unicamente na distância entre o novo item e os vizinhos mais próximos do mesmo, utilizando apenas as distâncias como valores utilizados na classificação do novo item.
+
+9) O classificador KNN contrói fronteiras de decisão lineares ou não lineares? Justifique sua resposta.
+
+Não lineares. Como o classificador KNN busca encontrar a menor distância entre os pontos mais próximos, ele tem a tendência de circundar o agrupamento de cada classe, ou seja, a fronteira de decisão tem a tendência de tomar o mesmo formato que o grupo de cada classe já desenhada.
+Por isso, a fronteira de decisão irá gravitar ao redor da região dos dados, fazendo isso por via de curvas, e não de retas.
+
+10) Discuta como a escolha do valor de K pode influenciar o algoritmo.
+
+Ao ter uma quantidade bastante baixa de K vizinhos, a classificação fica bastante sensível em relação a ruídos ou a outliers presentes no gráfico.
+Ao ter uma quantidade bastante alta de K vizinhos, a classificação corre o risco de analisar itens de outras classes, que teoricamente não teria muita influência na classificação do item a ser inserido.
+Além disso, é necessário um número de K vizinhos que não seja par, para impedir um empate na hora da análise dos dados, e também devemos ter cuidado para não termos um número que seja possível um empate por causa da quantidade de classes identificadas. Por exemplo, ao analisar
+os 3 vizinhos próximos, acabamos empatando com a escolha entre 3 classes diferentes para o nosso item a ser classificado.
