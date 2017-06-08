@@ -7,8 +7,50 @@ array_probabilidade = np.array([np.array([0.05, 0.05**2]), np.array([0.06, 0.06*
 2017-06-04 22:42:49.982805 - 2017-06-04 23:01:31.013703(0:18:41.030898)
 Jogos: 71642/40344784
 
-SPORTS_ID,	"EVENT_ID","	SETTLED_DATE",				"FULL_DESCRIPTION","																											SCHEDULED_OFF",		"EVENT",					"DT ACTUAL_OFF",			"SELECTION_ID",	"SELECTION",	"ODDS"
-1,					"131106037",	"26-04-2017 23:24:21",	"Brazilian Soccer/Brazilian Primeira Liga/Fixtures 26 April    /Fluminense v Brasil de Pelotas","26-04-2017 22:30",	"Half Time Score",	"26-04-2017 22:33:47",	"1",						"0 - 0",				"2.24"
+SPORTS_ID,
+1,				
 
-"NUMBER_BETS",	"VOLUME_MATCHED",	"LATEST_TAKEN",				"FIRST_TAKEN",				"WIN_FLAG",	"IN_PLAY"
-"2",						"36.54",						"26-04-2017 22:53:07",	"26-04-2017 22:53:07",	"0",					"IP"
+"EVENT_ID",
+"131737880",
+
+"SETTLED_DATE",			
+"27-05-2017 23:57:49",	
+
+"FULL_DESCRIPTION",																						
+"Brazilian Soccer/Campeonato/Fixtures 27 May      /Sao Paulo v Palmeiras",	
+
+"SCHEDULED_OFF",		
+"27-05-2017 22:00",	
+
+"EVENT",			
+"Match Odds",	
+
+"DT ACTUAL_OFF",			
+"27-05-2017 22:04:18",	
+
+"SELECTION_ID",		
+"58805",					
+
+"SELECTION",
+"The Draw",
+
+"ODDS",	
+"1.76",		
+
+"NUMBER_BETS",	
+"14",					
+
+"VOLUME_MATCHED",	
+"20.54",						
+
+"LATEST_TAKEN",				
+"27-05-2017 23:24:16",	
+
+"FIRST_TAKEN",				
+"27-05-2017 23:23:52",	
+
+"WIN_FLAG",	
+"0",					
+
+"IN_PLAY"
+"IP"
