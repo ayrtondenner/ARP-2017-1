@@ -23,10 +23,14 @@ def retorna_dia_do_ano(row):
     return datetime.strptime(row[4], '%d-%m-%Y %H:%M').timetuple().tm_yday
 
 def retorna_minuto_do_dia(row):
-    return datetime.strptime(row[4], '%d-%m-%Y %H:%M').hour * 60
+    data_jogo = datetime.strptime(row[4], '%d-%m-%Y %H:%M')
+    return data_jogo.hour * 60 + data_jogo.minute
 
 def retorna_dia_da_semana(row):
-    return calendar.day_name[datetime.strptime(row[4], '%d-%m-%Y %H:%M').weekday()]
+    encoder_dia = [0, 0, 0, 0, 0, 0, 0]
+
+    encoder_dia[datetime.strptime(row[4], '%d-%m-%Y %H:%M').weekday()] = 1
+    return encoder_dia
 
 def retorna_opcao_selecionada(row):
     if row[8] == retorna_time_de_casa(row):
@@ -95,8 +99,6 @@ array_entrada_principal = []
 array_entrada_opcao_selecionada = []
 array_saida = []
 
-linhas = 0
-
 opcao_selecionada_encoder = preprocessing.OneHotEncoder()
 opcao_selecionada_encoder.fit([[OPCAO_CASA], [OPCAO_EMPATE], [OPCAO_VISITANTE]])
 
@@ -105,14 +107,11 @@ with open(caminho_base, "rt", encoding='utf-8') as arquivo_base:
     reader = csv.reader(arquivo_base)
 
     for row in reader:
-        try:
-
-            #if(reader.line_num == 2784):
-            #    nadaaa = 0
-
+        try:            
             colunas_time_casa = retorna_time(retorna_time_de_casa(row))
             colunas_time_visitante = retorna_time(retorna_time_visitante(row))
             colunas_opcao_selecionada = retorna_opcao_selecionada(row)
+            colunas_dia_da_semana = retorna_dia_da_semana(row)
 
             array_entrada_principal.append(
                 np.array([
@@ -160,7 +159,14 @@ with open(caminho_base, "rt", encoding='utf-8') as arquivo_base:
 
                     retorna_dia_do_ano(row),        # Dia do ano
                     retorna_minuto_do_dia(row),     # Minuto do dia
-                    #retorna_dia_da_semana(row),    # Dia da semana
+
+                    colunas_dia_da_semana[0],       # Segunda-feira
+                    colunas_dia_da_semana[1],       # Terça-feira
+                    colunas_dia_da_semana[2],       # Quarta-feira
+                    colunas_dia_da_semana[3],       # Quinta-feira
+                    colunas_dia_da_semana[4],       # Sexta-feira
+                    colunas_dia_da_semana[5],       # Sábado
+                    colunas_dia_da_semana[6],       # Domingo
 
                     colunas_opcao_selecionada[0],   # Opção selecionada - Casa
                     colunas_opcao_selecionada[1],   # Opção selecionada - Empate
@@ -171,16 +177,11 @@ with open(caminho_base, "rt", encoding='utf-8') as arquivo_base:
             )
 
             array_saida.append(
-                np.array([
+                #np.array([
                     float(row[10]),                 # Total de apostas
-                   #float(row[11])                  # Total apostado
-                ])
+                    #float(row[11])                  # Total apostado
+                #])
             )
-
-            #array_entrada.append(array_entrada)
-            #array_saida.append(array_saida)
-
-            linhas += 1
 
         except Exception as e:
             excecao = e
@@ -188,13 +189,19 @@ with open(caminho_base, "rt", encoding='utf-8') as arquivo_base:
 np_array_entrada = np.array(array_entrada_principal)
 np_array_saida = np.array(array_saida)
 
-regr = linear_model.LinearRegression(normalize=False)
-regr.fit(np_array_entrada, np_array_saida)
-score = regr.score(np_array_entrada, np_array_saida)
+regressao_nao_normalizada = linear_model.LinearRegression(normalize=False)
+regressao_nao_normalizada.fit(np_array_entrada, np_array_saida)
+score_nao_normalizado = regressao_nao_normalizada.score(np_array_entrada, np_array_saida)
+
+print(str(score_nao_normalizado))
+
+regressao_normalizada = linear_model.LinearRegression(normalize=True)
+regressao_normalizada.fit(np_array_entrada, np_array_saida)
+score_normalizado = regressao_normalizada.score(np_array_entrada, np_array_saida)
 
 data_fim = datetime.now()
 
 print("\n\n------------------------------------------------------\n\n")
-print(str(linhas) + " linhas analisados.")
+print(str(len(array_entrada_principal)) + " linhas analisados com " + str(len(array_entrada_principal[0])) + " colunas cada.")
 print("" + str(data_inicio) + " - " + str(data_fim) + " (" + str(data_fim - data_inicio) + ")")
 result = 0
