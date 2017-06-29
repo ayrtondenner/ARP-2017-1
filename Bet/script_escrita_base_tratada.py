@@ -71,50 +71,50 @@ LISTA_ORDEM_2016 = [
 def define_cabecalho(quantidade_de_jogos_passados):
 
     cabecalho = [
-        "Posição 2016 do time da casa",
-        "Posição 2016 do time visitante",
+        "Posição 2015 do time da casa",
+        "Posição 2015 do time visitante",
 
-        "Palmeiras - Casa",
-        "Santos - Casa",
-        "Flamengo - Casa",
-        "Atletico MG - Casa",
-        "Botafogo RJ - Casa",
-        "Atletico PR - Casa",
-        "Corinthians - Casa",
-        "Ponte Preta - Casa",
-        "Gremio - Casa",
-        "Sao Paulo - Casa",
-        "Chapecoense - Casa",
-        "Cruzeiro - Casa",
-        "Fluminense - Casa",
-        "Sport Recife - Casa",
-        "Coritiba - Casa",
-        "Vitoria BA - Casa",
-        "Atletico GO - Casa",
-        "Avai - Casa",
-        "Vasco da Gama - Casa",
-        "Bahia - Casa",
+        str(LISTA_ORDEM_2015[0] + " - Casa"),
+        str(LISTA_ORDEM_2015[1] + " - Casa"),
+        str(LISTA_ORDEM_2015[2] + " - Casa"),
+        str(LISTA_ORDEM_2015[3] + " - Casa"),
+        str(LISTA_ORDEM_2015[4] + " - Casa"),
+        str(LISTA_ORDEM_2015[5] + " - Casa"),
+        str(LISTA_ORDEM_2015[6] + " - Casa"),
+        str(LISTA_ORDEM_2015[7] + " - Casa"),
+        str(LISTA_ORDEM_2015[8] + " - Casa"),
+        str(LISTA_ORDEM_2015[9] + " - Casa"),
+        str(LISTA_ORDEM_2015[10] + " - Casa"),
+        str(LISTA_ORDEM_2015[11] + " - Casa"),
+        str(LISTA_ORDEM_2015[12] + " - Casa"),
+        str(LISTA_ORDEM_2015[13] + " - Casa"),
+        str(LISTA_ORDEM_2015[14] + " - Casa"),
+        str(LISTA_ORDEM_2015[15] + " - Casa"),
+        str(LISTA_ORDEM_2015[16] + " - Casa"),
+        str(LISTA_ORDEM_2015[17] + " - Casa"),
+        str(LISTA_ORDEM_2015[18] + " - Casa"),
+        str(LISTA_ORDEM_2015[19] + " - Casa"),
 
-        "Palmeiras - Visitante",
-        "Santos - Visitante",
-        "Flamengo - Visitante",
-        "Atletico MG - Visitante",
-        "Botafogo RJ - Visitante",
-        "Atletico PR - Visitante",
-        "Corinthians - Visitante",
-        "Ponte Preta - Visitante",
-        "Gremio - Visitante",
-        "Sao Paulo - Visitante",
-        "Chapecoense - Visitante",
-        "Cruzeiro - Visitante",
-        "Fluminense - Visitante",
-        "Sport Recife - Visitante",
-        "Coritiba - Visitante",
-        "Vitoria BA - Visitante",
-        "Atletico GO - Visitante",
-        "Avai - Visitante",
-        "Vasco da Gama - Visitante",
-        "Bahia - Visitante",
+        str(LISTA_ORDEM_2015[0] + " - Visitante"),
+        str(LISTA_ORDEM_2015[1] + " - Visitante"),
+        str(LISTA_ORDEM_2015[2] + " - Visitante"),
+        str(LISTA_ORDEM_2015[3] + " - Visitante"),
+        str(LISTA_ORDEM_2015[4] + " - Visitante"),
+        str(LISTA_ORDEM_2015[5] + " - Visitante"),
+        str(LISTA_ORDEM_2015[6] + " - Visitante"),
+        str(LISTA_ORDEM_2015[7] + " - Visitante"),
+        str(LISTA_ORDEM_2015[8] + " - Visitante"),
+        str(LISTA_ORDEM_2015[9] + " - Visitante"),
+        str(LISTA_ORDEM_2015[10] + " - Visitante"),
+        str(LISTA_ORDEM_2015[11] + " - Visitante"),
+        str(LISTA_ORDEM_2015[12] + " - Visitante"),
+        str(LISTA_ORDEM_2015[13] + " - Visitante"),
+        str(LISTA_ORDEM_2015[14] + " - Visitante"),
+        str(LISTA_ORDEM_2015[15] + " - Visitante"),
+        str(LISTA_ORDEM_2015[16] + " - Visitante"),
+        str(LISTA_ORDEM_2015[17] + " - Visitante"),
+        str(LISTA_ORDEM_2015[18] + " - Visitante"),
+        str(LISTA_ORDEM_2015[19] + " - Visitante"),
 
         "Dia do ano",
         "Minuto do dia",
@@ -216,12 +216,19 @@ def retorna_quantidade_vitorias_passadas(lista_ordenada, row, nome_time, janela_
 
 def retorna_linha_tratada(lista_ordenada, row, quantidade_de_jogos_passados):
 
+    row[3] = row[3].replace("Ateltico", "Atletico")
+    row[8] = row[8].replace("Ateltico", "Atletico")
+
+    row[3] = row[3].replace("Cortiba", "Coritiba")
+    row[8] = row[8].replace("Cortiba", "Coritiba")
+
     colunas_time_casa = retorna_time(retorna_time_de_casa(row))
     colunas_time_visitante = retorna_time(retorna_time_visitante(row))
     #colunas_time_casa = encoder.transform([[LISTA_TIMES.index(retorna_time_de_casa(row))]]).toarray()[0]
     #colunas_time_visitante = encoder.transform([[LISTA_TIMES.index(retorna_time_visitante(row))]]).toarray()[0]
     colunas_opcao_selecionada = retorna_opcao_selecionada(row)
     colunas_dia_da_semana = retorna_dia_da_semana(row)
+    
 
     linha_tratada = np.array([
         LISTA_ORDEM_2015.index(retorna_time_de_casa(row)),
@@ -300,7 +307,7 @@ def tratar_base(quantidade_de_jogos_passados):
     data_inicio = datetime.now()
     linhas_lidas = 0
 
-    caminho_arquivo_final = "Bet/Resultado/base_tratada_2017_" + str(quantidade_de_jogos_passados) + "_jogos.csv"
+    caminho_arquivo_final = "Bet/Resultado/base_tratada_2016_" + str(quantidade_de_jogos_passados) + "_jogos.csv"
 
     with open(caminho_arquivo_final, "wt", encoding='latin-1', newline='') as arquivo_final:
 
@@ -315,11 +322,21 @@ def tratar_base(quantidade_de_jogos_passados):
             lista_ordenada = []
 
             for row in reader:
-                row[2] = datetime.strptime(row[2], '%d-%m-%Y %H:%M:%S')
-                row[4] = datetime.strptime(row[4], '%d-%m-%Y %H:%M')
-                row[6] = datetime.strptime(row[6], '%d-%m-%Y %H:%M:%S')
-                row[12] = datetime.strptime(row[12], '%d-%m-%Y %H:%M:%S')
-                row[13] = datetime.strptime(row[13], '%d-%m-%Y %H:%M:%S')
+                if row[2] != "":
+                    row[2] = datetime.strptime(row[2], '%d-%m-%Y %H:%M:%S')
+
+                if row[4] != "":
+                    row[4] = datetime.strptime(row[4], '%d-%m-%Y %H:%M')
+
+                if row[6] != "":
+                    row[6] = datetime.strptime(row[6], '%d-%m-%Y %H:%M:%S')
+
+                if row[12] != "":
+                    row[12] = datetime.strptime(row[12], '%d-%m-%Y %H:%M:%S')
+
+                if row[13] != "":
+                    row[13] = datetime.strptime(row[13], '%d-%m-%Y %H:%M:%S')
+
                 lista_ordenada.append(row)
 
             lista_ordenada = sorted(lista_ordenada, key=operator.itemgetter(4))

@@ -16,6 +16,7 @@ import math
 from sklearn.tree import DecisionTreeRegressor
 from sklearn.tree import ExtraTreeRegressor
 from sklearn.model_selection import cross_val_score
+from sklearn.neighbors import KNeighborsRegressor
 
 
 def imprime_resultado(regressor, array_entrada, array_saida):
@@ -68,31 +69,61 @@ np_array_saida = np.array(array_saida)
 #variancia = VarianceThreshold()
 #np_array_entrada = variancia.fit_transform(np_array_entrada)
 
-#regressao_nao_normalizada = linear_model.LinearRegression(normalize=False)
-#regressao_normalizada = linear_model.LinearRegression(normalize=True)
-#regressao_nao_normalizada.fit(np_array_entrada, np_array_saida)
-#regressao_normalizada.fit(np_array_entrada, np_array_saida)
+# regressao_nao_normalizada = linear_model.LinearRegression(normalize=False)
+# regressao_nao_normalizada.fit(np_array_entrada, np_array_saida)
+# print("Regressão não normalizada")
+# imprime_resultado(regressao_nao_normalizada, np_array_entrada, np_array_saida)
+# print("")
 
-#imprime_resultado(regressao_nao_normalizada, np_array_entrada, np_array_saida)
+# regressao_normalizada = linear_model.LinearRegression(normalize=True)
+# regressao_normalizada.fit(np_array_entrada, np_array_saida)
+# print("Regressão normalizada")
 # imprime_resultado(regressao_normalizada, np_array_entrada, np_array_saida)
+# print("")
 
-# regr_1 = DecisionTreeRegressor(max_depth=2)
-# regr_2 = DecisionTreeRegressor(max_depth=5)
-regr_3 = ExtraTreeRegressor()
-# regr_1.fit(np_array_entrada, np_array_saida)
-# regr_2.fit(np_array_entrada, np_array_saida)
-regr_3.fit(np_array_entrada, np_array_saida)
+# arvore_decisao = DecisionTreeRegressor()
+# arvore_decisao.fit(np_array_entrada, np_array_saida)
+# print("Árvore de decisão")
+# imprime_resultado(arvore_decisao, np_array_entrada, np_array_saida)
+# print("")
 
-# imprime_resultado(regr_1, np_array_entrada, np_array_saida)
-# imprime_resultado(regr_2, np_array_entrada, np_array_saida)
-imprime_resultado(regr_3, np_array_entrada, np_array_saida)
+# arvore_extra = ExtraTreeRegressor()
+# arvore_extra.fit(np_array_entrada, np_array_saida)
+# print("ExtraTree")
+# imprime_resultado(arvore_extra, np_array_entrada, np_array_saida)
+# print("")
 
-# linear_svr = svm.NuSVR()
-# linear_svr.fit(np_array_entrada, np_array_saida)
-# imprime_resultado(linear_svr, np_array_entrada, np_array_saida)
+for n in range(1, 6, 1):
+    nusvr = svm.NuSVR()
+    nusvr.fit(np_array_entrada, np_array_saida)
+    print("NuSVR")
+    imprime_resultado(nusvr, np_array_entrada, np_array_saida)
 
-#regressor = DecisionTreeRegressor(random_state=0)
-#(regressor, np_array_entrada, np_array_saida, cv=10)
+# print("")
+
+# for n in range(1, 6, 1):
+#     linear_svr = svm.LinearSVR()
+#     linear_svr.fit(np_array_entrada, np_array_saida)
+#     print("LinearSVR #" + str(n))
+#     imprime_resultado(linear_svr, np_array_entrada, np_array_saida)
+
+print("")
+
+for n in range(1, 6, 1):
+    svr = svm.SVR()
+    svr.fit(np_array_entrada, np_array_saida)
+    print("SVR #" + str(n))
+    imprime_resultado(svr, np_array_entrada, np_array_saida)
+
+# print("")
+
+for n in range(1, 6, 1):
+    knn = KNeighborsRegressor(n_neighbors=n)
+    knn.fit(np_array_entrada, np_array_saida)
+    print("KNN #" + str(n))
+    imprime_resultado(knn, np_array_entrada, np_array_saida)
+
+print("")
 
 data_fim = datetime.now()
 
