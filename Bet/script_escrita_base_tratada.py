@@ -13,10 +13,13 @@ from datetime import datetime
 # from sklearn.preprocessing import OneHotEncoder
 import operator
 # import math
+from itertools import groupby
+import copy
+import re
 
-OPCAO_CASA = 1
-OPCAO_EMPATE = 2
-OPCAO_VISITANTE = 3
+OPCAO_CASA = 0
+OPCAO_EMPATE = 1
+OPCAO_VISITANTE = 2
 
 #QUANTIDADE_DE_JOGOS_PASSADOS = 5 #3 #5
 
@@ -127,11 +130,11 @@ def define_cabecalho(quantidade_de_jogos_passados):
         "Sábado",
         "Domingo",
 
-        "Opção selecionada - Casa",
-        "Opção selecionada - Empate",
-        "Opção selecionada - Visitante",
+        # "Opção selecionada - Casa",
+        # "Opção selecionada - Empate",
+        # "Opção selecionada - Visitante",
 
-        "Valor da odd",
+        # "Valor da odd",
 
         "Vitória do time da casa nos últimos " + str(quantidade_de_jogos_passados) + " jogos",
         "Vitória do time visitante nos últimos " + str(quantidade_de_jogos_passados) + " jogos",
@@ -159,16 +162,34 @@ def retorna_dia_da_semana(row):
     encoder_dia[row[4].weekday()] = 1
     return encoder_dia
 
+def retorna_vetor_opcao_selecionada(row):
+    encoder_opcao = [0, 0, 0]
+
+    encoder_opcao[retorna_opcao_selecionada(row)] = 1
+
+    return encoder_opcao
+
 def retorna_opcao_selecionada(row):
     if row[8] == retorna_time_de_casa(row):
         # TIME DA CASA
-        return [1, 0, 0]
+        return OPCAO_CASA
     elif row[8] == retorna_time_visitante(row):
         # TIME VISITANTE
-        return [0, 0, 1]
+        return OPCAO_VISITANTE
     else:
         # EMPATE
-        return [0, 1, 0]
+        return OPCAO_EMPATE
+
+def converte_opcao_pelo_numero(numero):
+
+    if numero == OPCAO_CASA:
+        return "Casa"
+    elif numero == OPCAO_EMPATE:
+        return "Empate"
+    elif numero == OPCAO_VISITANTE:
+        return "Visitante"
+    else:
+        raise ValueError("Valor não encontrado")
 
 def retorna_time(time):
     encoder_time = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
@@ -176,7 +197,7 @@ def retorna_time(time):
     indice = LISTA_ORDEM_2015.index(time)
 
     encoder_time[indice] = 1
-    
+
     #raise ValueError("Time " + str(time)  + " não encontrado")
 
     return encoder_time
@@ -190,27 +211,19 @@ def retorna_quantidade_vitorias_time_visitante(lista_ordenada, row, janela_jogos
     return retorna_quantidade_vitorias_passadas(lista_ordenada, row, nome_time, janela_jogos)
 
 def retorna_quantidade_vitorias_passadas(lista_ordenada, row, nome_time, janela_jogos):
-    if(janela_jogos <= 0):
+    if janela_jogos <= 0:
         return 0
 
     quantidade_vitorias = 0
     lista_ultimos_jogos = []
 
-    lista_jogos_anteriores = [x for x in lista_ordenada[:lista_ordenada.index(row)] if x[8] == nome_time and x[4] != row[4]]
+    lista_jogos_anteriores = [x for x in lista_ordenada[:lista_ordenada.index(row)] if nome_time in x[3] and x[3] != row[3]]
 
-    if len(lista_jogos_anteriores) > 0:
+    lista_janela = lista_jogos_anteriores[-janela_jogos:]
 
-        lista_revertida = list(reversed(lista_jogos_anteriores))
+    if len(lista_janela) > 0:
 
-        for linha_analisada in lista_revertida:
-
-            if len([x for x in lista_ultimos_jogos if x[4] == linha_analisada[4]]) == 0:
-                lista_ultimos_jogos.append(linha_analisada)
-
-                if(len(lista_ultimos_jogos) == janela_jogos):
-                    break
-
-        quantidade_vitorias = len([x for x in lista_ultimos_jogos if x[14] == "1"])
+        quantidade_vitorias = len([x for x in lista_janela if x[8] == nome_time])
 
     return quantidade_vitorias
 
@@ -224,11 +237,11 @@ def retorna_linha_tratada(lista_ordenada, row, quantidade_de_jogos_passados):
 
     colunas_time_casa = retorna_time(retorna_time_de_casa(row))
     colunas_time_visitante = retorna_time(retorna_time_visitante(row))
-    #colunas_time_casa = encoder.transform([[LISTA_TIMES.index(retorna_time_de_casa(row))]]).toarray()[0]
-    #colunas_time_visitante = encoder.transform([[LISTA_TIMES.index(retorna_time_visitante(row))]]).toarray()[0]
-    colunas_opcao_selecionada = retorna_opcao_selecionada(row)
+
+    #colunas_opcao_selecionada = retorna_vetor_opcao_selecionada(row)
+
     colunas_dia_da_semana = retorna_dia_da_semana(row)
-    
+
 
     linha_tratada = np.array([
         LISTA_ORDEM_2015.index(retorna_time_de_casa(row)),
@@ -287,17 +300,20 @@ def retorna_linha_tratada(lista_ordenada, row, quantidade_de_jogos_passados):
         colunas_dia_da_semana[5],       # Sábado
         colunas_dia_da_semana[6],       # Domingo
 
-        colunas_opcao_selecionada[0],   # Opção selecionada - Casa
-        colunas_opcao_selecionada[1],   # Opção selecionada - Empate
-        colunas_opcao_selecionada[2],   # Opção selecionada - Visitante
+        #colunas_opcao_selecionada[0],   # Opção selecionada - Casa
+        #colunas_opcao_selecionada[1],   # Opção selecionada - Empate
+        #colunas_opcao_selecionada[2],   # Opção selecionada - Visitante
 
-        float(row[9]),                  # Valor da odd
+        #float(row[9]),                  # Valor da odd
 
         retorna_quantidade_vitorias_time_da_casa(lista_ordenada, row, quantidade_de_jogos_passados),    # N últimas vitórias
         retorna_quantidade_vitorias_time_visitante(lista_ordenada, row, quantidade_de_jogos_passados),
 
-        float(row[10]),                 # Total de apostas
-        float(row[11])                  # Total apostado
+        #float(row[10]),                 # Total de apostas
+        #float(row[11])                  # Total apostado
+
+        row[9],                         # Opção com maior quantidade de apostas
+        row[10]                         # Opção com maior quantidade apostada
     ])
 
     return linha_tratada
@@ -307,7 +323,7 @@ def tratar_base(quantidade_de_jogos_passados):
     data_inicio = datetime.now()
     linhas_lidas = 0
 
-    caminho_arquivo_final = "Bet/Resultado/base_tratada_2016_" + str(quantidade_de_jogos_passados) + "_jogos.csv"
+    caminho_arquivo_final = "Bet/Resultado/base_tratada_2016_" + str(quantidade_de_jogos_passados) + "_jogos_categorizado.csv"
 
     with open(caminho_arquivo_final, "wt", encoding='latin-1', newline='') as arquivo_final:
 
@@ -317,46 +333,105 @@ def tratar_base(quantidade_de_jogos_passados):
         with open(CAMINHO_ARQUIVO_BASE_CRUA, "rt", encoding='latin-1') as arquivo_base:
 
             reader = csv.reader(arquivo_base)
-            next(reader)
+            next(reader) # O script vai pular a leitura do cabeçalho do arquivo original
 
-            lista_ordenada = []
+            lista_itens = [x for x in reader]
 
-            for row in reader:
-                if row[2] != "":
-                    row[2] = datetime.strptime(row[2], '%d-%m-%Y %H:%M:%S')
+            # Organiza as strings da descrição do evento
+            for item in lista_itens:
+                # Brazilian Soccer/Campeonato/Fixtures 01 October   / Santos v Atletico PR
+                #item[1] = int(item[1])
+                item[3] = re.sub('\s+', ' ', item[3]).replace(" /", "/").replace("/ ", "/")
 
-                if row[4] != "":
-                    row[4] = datetime.strptime(row[4], '%d-%m-%Y %H:%M')
+            # # Ordena lista pela descrição do evento
+            lista_ordenada = sorted(lista_itens, key=operator.itemgetter(3))
 
-                if row[6] != "":
-                    row[6] = datetime.strptime(row[6], '%d-%m-%Y %H:%M:%S')
+            lista_com_grupos = groupby(lista_ordenada, lambda x: x[3])
 
-                if row[12] != "":
-                    row[12] = datetime.strptime(row[12], '%d-%m-%Y %H:%M:%S')
+            lista_agrupada = []
 
-                if row[13] != "":
-                    row[13] = datetime.strptime(row[13], '%d-%m-%Y %H:%M:%S')
+            for key, group in lista_com_grupos:
 
-                lista_ordenada.append(row)
+                # Soma de apostas de casa, empate e visitante
+                quantidade_apostas = [0, 0, 0]
 
-            lista_ordenada = sorted(lista_ordenada, key=operator.itemgetter(4))
-            #lista_ordenada = [x for x in lista_ordenada if x[12] <= x[4]]
+                # Soma de valores apostados de casa, empate e visitante
+                quantidade_apostado = [0, 0, 0]
 
-            try:
-                for row in lista_ordenada:
-                    linhas_lidas += 1
-                    linha_tratada = retorna_linha_tratada(lista_ordenada, row, quantidade_de_jogos_passados)
-                    writer.writerow(linha_tratada)
+                lista_grupo = list(group)
 
-            except Exception as e:
-                excecao = e
-            
+                for item in lista_grupo:
+                    opcao_selecionada = retorna_opcao_selecionada(item)
+
+                    quantidade_apostas[opcao_selecionada] += int(item[10])
+                    quantidade_apostado[opcao_selecionada] += float(item[11])
+
+                linha_agrupada = copy.copy(item)
+
+                # Removendo coisas específicas da opção selecionada
+                del linha_agrupada[14]  # WIN_FLAG
+                del linha_agrupada[13]  # FIRST_TAKEN
+                del linha_agrupada[12]  # LATEST_TAKEN
+                del linha_agrupada[11]  # VOLUME_MATCHED
+                del linha_agrupada[10]  # NUMBER_BETS
+                del linha_agrupada[9]   # ODDS
+                del linha_agrupada[8]   # SELECTION
+                del linha_agrupada[7]   # SELECTION_ID
+
+                if linha_agrupada[2] != "":
+                    linha_agrupada[2] = datetime.strptime(linha_agrupada[2], '%d-%m-%Y %H:%M:%S')
+
+                if linha_agrupada[4] != "":
+                    linha_agrupada[4] = datetime.strptime(linha_agrupada[4], '%d-%m-%Y %H:%M')
+
+                if linha_agrupada[6] != "":
+                    linha_agrupada[6] = datetime.strptime(linha_agrupada[6], '%d-%m-%Y %H:%M:%S')
+
+                try:
+                    time_vencedor = [x for x in lista_grupo if x[14] == "1"][0][8]
+                except Exception as ex:
+                    if linha_agrupada[1] == 125204259:
+                        time_vencedor = "America MG"
+                    elif linha_agrupada[1] == 126779168:
+                        time_vencedor = "Flamengo"
+                    elif linha_agrupada[1] == 127817213:
+                        time_vencedor = "Atletico PR"
+                    else:
+                        raise RuntimeError("Alternativa para jogo com exceção não encontrada!")
+
+                linha_agrupada.append(time_vencedor)
+
+                indice_quantidade_apostas = quantidade_apostas.index(max(quantidade_apostas))
+                indice_quantidade_apostado = quantidade_apostado.index(max(quantidade_apostado))
+
+                linha_agrupada.append(converte_opcao_pelo_numero(indice_quantidade_apostas))
+                linha_agrupada.append(converte_opcao_pelo_numero(indice_quantidade_apostado))
+
+                lista_agrupada.append(linha_agrupada)
+
+        # Ordena as linhas pela data de início do jogo
+        lista_ordenada = sorted(lista_agrupada, key=operator.itemgetter(4))
+
+        #lista_ordenada = [x for x in lista_ordenada if x[12] <= x[4]]
+
+        try:
+            for row in lista_ordenada:
+                linhas_lidas += 1
+                linha_tratada = retorna_linha_tratada(lista_ordenada, row, quantidade_de_jogos_passados)
+                writer.writerow(linha_tratada)
+
+        except Exception as e:
+            excecao = e
+
     data_fim = datetime.now()
 
     print(str(linhas_lidas) + " linhas analisadas.")
     print("" + str(data_inicio) + " - " + str(data_fim) + " (" + str(data_fim - data_inicio) + ")")
 
-lista_janela_jogos = [0, 3, 5]
+####################################################################################################
+
+#lista_janela_jogos = [0, 3, 5]
+lista_janela_jogos = [5]
 
 for quantidade_de_jogos_passados in lista_janela_jogos:
     tratar_base(quantidade_de_jogos_passados)
