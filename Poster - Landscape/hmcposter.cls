@@ -57,19 +57,28 @@
 \InputIfFileExists{hmcposter.cfg}{}{}
 
 %% Set some dimensions for layout.
-\setlength{\paperwidth}{54in}
-\setlength{\paperheight}{36in}
-\setlength{\textwidth}{50.5in}
-\setlength{\textheight}{28in}
+
+%% ====== Paisagem
+%\setlength{\paperwidth}{54in}
+%\setlength{\paperheight}{36in}
+%\setlength{\textwidth}{50.5in}
+%\setlength{\textheight}{28in}
+
+%% ====== Retrato
+\setlength{\paperwidth}{36in}
+\setlength{\paperheight}{54in}
+\setlength{\textwidth}{33in}
+\setlength{\textheight}{42.5in}
+
 \setlength{\topmargin}{0.5in}
-\setlength{\oddsidemargin}{0.75in}
+\setlength{\oddsidemargin}{0.5in}
 \setlength{\evensidemargin}{\oddsidemargin}
 \setlength{\topmargin}{0.5in}
 \setlength{\headheight}{4in}
 \setlength{\headsep}{0.5in}
 \setlength{\footskip}{1in}
 \setlength{\voffset}{0pt}
-\setlength{\hoffset}{100pt}
+\setlength{\hoffset}{0pt}
 
 %% Require some packages.
 \RequirePackage{ifthen}
@@ -197,7 +206,7 @@
 \fancyhead[C]{%
   \begin{center}
     {\color{black}\Large\textsf{\@class}\\}%
-    {\color{dkblue}\fontsize{100pt}{120pt}\selectfont\textsf{\textbf{\@title}}\\[0.25em]}
+    {\color{dkblue}\fontsize{50pt}{80pt}\selectfont\textsf{\textbf{\@title}}\\[0.25em]}
     {\color{black}\Large\textsf{\@author}\\[-0.5em]}
   \end{center}
 }
@@ -216,7 +225,7 @@
   {}% Do nothing.
   {\textcolor{black}{%
       \set@ess{\@advisor}%
-      \textbf{Advisor\@ess:}
+      \textbf{Professores orientadores:}
       \global\let\and\@andcommaspace
       \@advisor%
     }
@@ -291,7 +300,7 @@
 \newenvironment{poster}{%
 \thispagestyle{fancy}
 %{\color{hmcgold}\rule{\textwidth}{2pt}}
-\begin{multicols*}{4}
+\begin{multicols*}{2}
 }%
 {\end{multicols*}
 }

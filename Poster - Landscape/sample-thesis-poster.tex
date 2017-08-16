@@ -1,23 +1,22 @@
 %% Use the hmcposter class with the thesis document-class option.
 \documentclass[thesis]{hmcposter}
-\usepackage{graphicx}
+\usepackage{graphicx} 
 \usepackage{natbib}
 \usepackage{booktabs}
-\usepackage{subfig}
-\usepackage{amsmath}
-\usepackage{textcomp}
-\usepackage{url}
+\usepackage{subfig} 
+\usepackage{amsmath} 
+\usepackage{textcomp} 
+\usepackage{url}  
+
 
 \usepackage{hyperref}
-\usepackage{cite}
+\usepackage{cite} 
 \usepackage[utf8]{inputenc}
-\usepackage[portuguese, english]{babel}
+\usepackage[portuguese]{babel}
 
-\usepackage{biblatex} 
-\bibliography{refs}
-
-
-
+%\usepackage{biblatex}  
+%\bibliography{refs}
+ 
 %% Author of the thesis.
 \author{Ayrton Denner da Silva Amaral}
 
@@ -33,7 +32,7 @@
 %% communicate the results of a project.
 %% 
 %% Use the format Math nnn: Class Title.
-\class{Disciplina: Algoritmos de Reconhecimento de Padrões}
+\class{Algoritmos de Reconhecimento de Padrões}
 
 %% Advisor(s) name or names.  Separate with \and.
 \advisor{Gustavo Teodoro Laureano\and Anderson da Silva Soares}
@@ -96,55 +95,39 @@ Para o desenvolvimento do projeto, foram tomadas uma sequência de etapas para o
 \item Também utilizamos a suíte \emph{Weka} para aplicação dos algoritmos de aprendizado de máquina.
 \item Analisamos os dados oferecidos pela Betfair por todo o ano de 2016, em uma base de aproximadamente 55 milhões de linhas.
 \item Ao aglutinarmos os dados de uma mesma partida, atingimos o número de 379 linhas, a mesma quantidade de jogos no ano de 2016.
-\item Após filtramos as linhas necessárias para o estudo, foi necessário um pré-processamento dos dados oferecidos, como transformar datas e nome dos times em números (esse último via técnica de \emph{one-hot encoding}), e adicionar a quantidade de vitórias de cada time nos últimos 5 jogos.
-\item No final de todas essas etapas, com todos os dados já preparados para o processamento, finalmente aplicamos os algoritmos de aprendizado de máquina de categorização aos valores obtidos.
+\item Também foi necessário um pré-processamento dos dados oferecidos, como transformar datas e nome dos times em números (esse último via técnica de \emph{one-hot encoding}), e adicionar a quantidade de vitórias de cada time nos últimos 5 jogos.
+\item No final de todas essas etapas e com todos os dados preparados para o processamento, finalmente aplicamos os algoritmos de aprendizado de máquina de categorização aos valores obtidos.
 \end{itemize}
 
 \section{Resultados}%
 
-Após filtramos e trabalharmos com os dados restantes, os primeiros resultados obtidos foram acerca da eficácia dos algoritmos preverem os resultados como um todo, exibidos na Figura~\ref{fig:total-algoritmo}:
+Após filtrarmos e trabalharmos com os dados restantes, os primeiros resultados obtidos foram acerca da eficácia dos algoritmos preverem os resultados como um todo, exibidos na Figura~\ref{fig:algoritmo-total}:
 
 \begin{figure}
 \begin{center}
-\fbox{\includegraphics[width=10in]{imagens_algoritmo/total_algoritmo.png}}
+\fbox{\includegraphics[width=10in]{imagens_algoritmo/algoritmo_total.png}}
 \caption{Porcentagem de acerto dos algoritmos para todos os resultados}%
-\label{fig:total-algoritmo}
+\label{fig:algoritmo-total}
 \end{center}
 \end{figure}
 
-Porém, esses resultados não são suficientes. Por mais que os algoritmos tenham bons resultados com todos os valores, é necessário especificar a eficácia de cada algoritmo com cada categoria possível de resultado de apostas (time da casa, time visitante ou empate). Essa diferença se faz visível na próxima sequência da Figura~\ref{fig:casa-algoritmo}, Figura~\ref{fig:visitante-algoritmo} e Figura~\ref{fig:empate-algoritmo}:
+Porém, esses resultados não são suficientes. Ainda que os algoritmos tenham bons resultados com todas as categorias, é necessário especificar a eficácia de cada algoritmo com cada categoria possível de apostas (time da casa, time visitante ou empate). Essa diferença se faz visível no próximo gráfico da Figura~\ref{fig:algoritmo-categoria}:
 
 \begin{figure}
 \begin{center}
-\fbox{\includegraphics[width=10in]{imagens_algoritmo/casa_algoritmo.png}}
-\caption{Porcentagem de acerto dos algoritmos para resultados com maioria de apostas do time da casa}%
-\label{fig:casa-algoritmo}
+\fbox{\includegraphics[width=10in]{imagens_algoritmo/algoritmo_categoria.png}}
+\caption{Porcentagem de acerto dos algoritmos para resultados de cada categoria}%
+\label{fig:algoritmo-categoria}
 \end{center}
 \end{figure}
 
-\begin{figure}
-\begin{center}
-\fbox{\includegraphics[width=10in]{imagens_algoritmo/visitante_algoritmo.png}}
-\caption{Porcentagem de acerto dos algoritmos para resultados com maioria de apostas do time visitante}%
-\label{fig:visitante-algoritmo}
-\end{center}
-\end{figure}
+Outro valor que também podemos utilizar para análise é o chamado Coeficiente de Kappa, que mede a concordância entre os valores da classificação apresentada, apresentado na Figura~\ref{fig:algoritmo-kappa}:
 
 \begin{figure}
 \begin{center}
-\fbox{\includegraphics[width=10in]{imagens_algoritmo/empate_algoritmo.png}}
-\caption{Porcentagem de acerto dos algoritmos para resultados com maioria de apostas do empate}%
-\label{fig:empate-algoritmo}
-\end{center}
-\end{figure}
-
-Com isso, é visível a diferença entre a análise dos valores como um todo, e a análise dos valores específicos de uma determinada classe. Outro valor utilizado para análise fora o chamado Coeficiente de Kappa. Tal coeficiente mede a concordância entre os valores da classificação apresentada, e o mesmo é representado na Figura~\ref{fig:kappa-algoritmo}:
-
-\begin{figure}
-\begin{center}
-\fbox{\includegraphics[width=10in]{imagens_algoritmo/kappa_algoritmo.png}}
+\fbox{\includegraphics[width=10in]{imagens_algoritmo/algoritmo_kappa.png}}
 \caption{Porcentagem do Coeficiente de Kappa para cada algoritmo utilizado}%
-\label{fig:kappa-algoritmo}
+\label{fig:algoritmo-kappa}
 \end{center}
 \end{figure}
 
@@ -152,54 +135,27 @@ Com isso, é visível a diferença entre a análise dos valores como um todo, e 
 
 Ao final dessas análises, fica visível que um valor alto de acerto para o total de dados não é necessariamente um resultado bem-sucedido, podendo ser apenas um falso positivo que ignora a situação das categorias em específico.
 
-Após esses resultados inicialmente positivos, o próximo passo para a predição de tendência de apostas é buscar não apenas a classificação, mas sim a quantificação de apostas em cada opção das bolsas esportivas. Ou seja, ao invés de utilizar algoritmos de classificação para indicar qual opção receberá mais apostas, utilizar algoritmos de regressão para indicar quantas apostas cada opção receberá.
+O próximo passo do nosso trabalho de predição será buscar a quantificação de apostas em cada opção das bolsas esportivas. Ou seja, iremos buscar quantas apostas cada opção receberá, ao invés de apenas indicar qual opção receberá mais apostas.
 
-Para a continuação das próximas etapas, faz-se necessário uma busca por bases mais completas em relação a eventos esportivos, com outros dados e estatísticas que possam melhor complementar a construção de um sistema de regressão de tendências.
-
-% Force a column break here so the references begin the next column.
-%\columnbreak
-
-%% References.
-%% Note that BibTeX will add its own section-level header, ``References''.
+Como forma de buscar resultados mais eficazes, será necessário uma busca por bases mais completas em relação a eventos esportivos, com outros dados e estatísticas que possam melhor agregar no resultado final.
 
 \section{Agradecimentos}
 
-Por primeiro, gostaria de agradecer ao Instituto de Informática da Universidade Federal de Goiás, por dar apoio e ofertar disciplinas que, como essa, apoiam e fomentam a produção na comunidade e o estudo dos alunos.
+Por primeiro, gostaria de agradecer ao Instituto de Informática da Universidade Federal de Goiás, por oferecer o espaço para essa apresentação, além de ofertar essas e outras matérias relevantes para área.
 
-Por segundo, gostaria de agradecer aos professores Anderson Soares e Gustavo Laureano, que ministraram a presente disciplina e também nos ajudaram na construção dos trabalhos e no entendimento do conteúdo apresentado.
+Por segundo, gostaria de agradecer aos professores Anderson Soares e Gustavo Laureano, que ministraram a disciplina de Algoritmos de Reconhecimento de Padrões, e que junto com os outros colegas da turma, também ajudaram na construção dos trabalhos e no entendimento do conteúdo apresentado.
 
-Por terceiro, gostaria de agradecer aos colegas da disciplina de Algoritmos de Reconhecimento de Padrões, que também muito ajudaram no decorrer da disciplina o entendimento do conteúdo e também no incentivo do estudo dos tópicos apresentados
-
-Por último, gostaria de agradecer a todos que ajudaram na construção desse conteúdo, e também daqueles que reservaram um pouco do seu tempo para prestigiar essa apresentação.
+Por último, gostaria de agradecer a aqueles que reservaram um pouco do seu tempo para prestigiar essa apresentação.
 
 \section{Para maiores informações}
 
-Possibly the most important section of your poster!  Tell people
-how they can find out more about your research.  Be sure to
-include
 \begin{itemize}
-\item Your e-mail address.  Mine's \url{cmc@math.hmc.edu}.
-\item A URL for a website with more information.  \url{http://www.math.hmc.edu/computing/support/printing/posters/}.
-\item If possible, a URL where they can download and read your full
-  report.  The same as the last.
-\item A URL where they can download your \emph{poster}.  And, again,
-  the same URL will do you.
+\item Email para contato: \url{ayrtondenner_2013@hotmail.com}
+\item Link para repositório no Github do poster: \url{https://github.com/ayrtondenner/ARP-2017-1/tree/master/Poster%20-%20Landscape}
+\item Seção da Betfair para jogos da Série A do Campeonato Brasileiro \url{https://www.betfair.com/exchange/plus/football/competition/13}
+\item Lista com dados históricos da Betfair: \url{http://data.betfair.com/}
 \end{itemize}
-
-\cite{einstein}
-
-%\section{Referências}
-
-\printbibliography
-
-%\bibliographystyle{ieee}
-%\bibliographystyle{abbrv}
-
-%\bibliographystyle{acm}
-%\bibliography{biblio}
 
 \end{poster}
 
 \end{document}
-
- 
